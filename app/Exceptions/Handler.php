@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -34,6 +35,17 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($exception instanceof InternalException) {
+            try {
+                DB::table('log_erros')->insert(
+                    [
+                        'erro'       => $exception->getInternalException()->__toString(),
+                        'created_at'    => date('Y-m-d H:i:s')
+                    ]
+                );
+            } catch (\Exception $e) { } //Não fazer nada se acontecer erro.
+        }
+
         parent::report($exception);
     }
 
@@ -46,7 +58,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof CustomException || $exception instanceof InternalException) { 
+        if ($exception instanceof CustomException || $exception instanceof InternalException) {
             return $exception->response();
         }
 

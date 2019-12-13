@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\CustomException;
+use App\Exceptions\InternalException;
 use Illuminate\Http\Request;
 
 class TesteController extends Controller
@@ -19,7 +20,8 @@ class TesteController extends Controller
 
     public function get(Request $request)
     { 
-        throw new CustomException('chavecustomdoerro', "Teste de exception", 400);
+        $e = new CustomException('chavecustomdoerro', "Teste de exception", 400);
+        throw new InternalException($e, "mensagem pro usuário");
     }
 
     //
