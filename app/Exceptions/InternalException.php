@@ -2,10 +2,12 @@
 
 namespace App\Exceptions;
 
+use Exception;
+
 /**
- * Classe base de exceções personalizadas.
+ * Classe base de exceções internas e inesperadas.
  */
-class CustomException extends \Exception
+class InternalException extends \Exception
 {
     /**
      * Mensagem de erro que será exibida ao client.
@@ -20,14 +22,22 @@ class CustomException extends \Exception
      */
     protected $status_code;
     /**
-     * Identificador do erro, para que quem esteja consumindo esta WebApi possa compreender e tratar os erros com base no seu 'tipo'
+     * Identificador do erro, para que quem esteja consumindo esta WebApi possa compreender e tratar os erros com base no seu 'tipo'.
      *
      * @var string
      */
     protected $error_key;
 
-    public function __construct(string $error_key, string $message, int $status_code)
+    /**
+     * Exception interna que causou o erro.
+     *
+     * @var Exception
+     */
+    private $internal_exception;
+
+    public function __construct(Exception $internal_exception, string $message = "Erro interno no servidor", int $status_code = 500, string $error_key = "interno")
     {
+        $this->internal_exception = $internal_exception;
         $this->error_key = $error_key;
         $this->message = $message;
         $this->status_code = $status_code;
@@ -45,13 +55,13 @@ class CustomException extends \Exception
     }
 
     /**
-     * Retorna mais detalhes da Exception. NÃO USAR ESSE MÉTODO COMO RETORNO PARA O CLIENT.
+     * Retorna a Exception interna que causou o erro.
      *
-     * @return string Retornará o arquivo onde ocorreu a Exception, linha, Http status code e mensagem customizada.
+     * @return \Exception
      */
-    public function __toString()
+    final public function getInternalException()
     {
-        return $this->getFile() . "::{$this->getLine()} : [{$this->status_code}]: {$this->message}\n";
+        return $this->internal_exception;
     }
 
     /**

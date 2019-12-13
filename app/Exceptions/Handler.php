@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof CustomException) { 
+        if ($exception instanceof CustomException || $exception instanceof InternalException) { 
             return $exception->response();
         }
 
