@@ -18,3 +18,7 @@ $router->get('/', function () use ($router) {
 $router->group(['prefix' => 'teste'], function () use ($router) {
     $router->get('', 'TesteController@get');
 });
+
+$router->group([], function () use ($router) {
+    $router->post('usuarios/novo', 'AuthController@store');
+});

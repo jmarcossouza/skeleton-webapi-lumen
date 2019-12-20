@@ -20,11 +20,9 @@ class CreateUsuariosTable extends Migration
             $table->char('senha', 60);
             $table->string('nome', 20);
             $table->string('sobrenome', 40);
-
-            $table->char('token_recuperar_senha', 60)->nullable()->default(null)->unique();
+            $table->char('token_recuperar_senha', 64)->nullable()->default(null)->unique()->comment('Token para o usuário redefinir a senha da conta.');;
             $table->dateTime('exp_recuperar_senha')->nullable()->default(null);
-            $table->char('token_verificar_email', 60)->nullable()->unique(); //->default(null)
-            //$table->dateTime('exp_verificar_email')->nullable()->default(null); //Não acho que é normal limitar um tempo para ativar a conta
+            $table->char('token_verificar_email', 64)->nullable()->unique()->comment('Token para o usuário verificar a conta. Se estiver nulo, é porque a conta está verificada.');
             $table->timestamps();
         });
     }
