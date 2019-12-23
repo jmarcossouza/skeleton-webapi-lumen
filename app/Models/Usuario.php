@@ -51,9 +51,7 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
             }
         });
         self::created(function ($model) {
-            if (config('defaults.log') == true) {
-                Log::newLog(1, $model->id);
-            }
+            Log::newLog(1, $model->id);
         });
         self::updating(function ($model) {
             $model->senha = self::hashSenha($model->senha);
@@ -77,7 +75,8 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
      * @param string $senha senha a ser verificada.
      * @return boolean Retorna true se as senhas baterem. false caso contrário.
      */
-    public function verificarSenha(string $senha): bool {
+    public function verificarSenha(string $senha): bool
+    {
         return Hash::check($senha, $this->senha);
     }
 

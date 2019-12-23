@@ -18,15 +18,17 @@ class Log extends Model
 
     public static function newLog(int $acao, int $usuario_id): void
     {
-        try {
-            self::create([
-                'usuario_id' => $usuario_id,
-                'ip' => self::clientIp(),
-                'acao_id' => $acao
-            ]);
-        } catch (\Throwable $th) {
-            // Não vou dar throw, porque o throw não dará rollback no que já foi feito, então é melhor só não fazer o Log e retornar a mensagem de sucesso normalmente
-            // throw new InternalException($th, 'Erro interno no servidor. Por favor, tente novamente.');
+        if (config('defaults.log') == true) {
+            try {
+                self::create([
+                    'usuario_id' => $usuario_id,
+                    'ip' => self::clientIp(),
+                    'acao_id' => $acao
+                ]);
+            } catch (\Throwable $th) {
+                // Não vou dar throw, porque o throw não dará rollback no que já foi feito, então é melhor só não fazer o Log e retornar a mensagem de sucesso normalmente
+                // throw new InternalException($th, 'Erro interno no servidor. Por favor, tente novamente.');
+            }
         }
     }
 
