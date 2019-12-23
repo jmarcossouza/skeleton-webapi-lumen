@@ -52,14 +52,11 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
         });
         self::created(function ($model) {
             if (config('defaults.log') == true) {
-                
+                Log::newLog(1, $model->id);
             }
         });
         self::updating(function ($model) {
-            self::hashSenha($model->senha);
-        });
-        self::updated(function ($model) {
-            // ... code here
+            $model->senha = self::hashSenha($model->senha);
         });
     }
 
@@ -127,7 +124,8 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
         return [
             'nome' => $this->nome,
             'sobrenome' => $this->sobrenome,
-            'email' => $this->email
+            'email' => $this->email,
+            'admin' => $this->admin
         ];
     }
     /**
