@@ -1,7 +1,9 @@
 <?php
 
+use App\Models\Usuario;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class CreateUsuariosTable extends Migration
@@ -16,6 +18,7 @@ class CreateUsuariosTable extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->boolean('ativo')->default(true);
+            $table->boolean('admin')->default(false)->comment('Se o usuário faz parte da equipe de administração do sistema. Isso pode ser usado para mostrar dados e permitir ações somente à administradores.');
             $table->string('email', 60)->unique();
             $table->char('senha', 60);
             $table->string('nome', 20);
@@ -25,6 +28,8 @@ class CreateUsuariosTable extends Migration
             $table->char('token_verificar_email', 64)->nullable()->unique()->comment('Token para o usuário verificar a conta. Se estiver nulo, é porque a conta está verificada.');
             $table->timestamps();
         });
+
+        $this->insert();
     }
 
     /**
@@ -35,5 +40,26 @@ class CreateUsuariosTable extends Migration
     public function down()
     {
         Schema::dropIfExists('usuarios');
+    }
+
+    /**
+     * Registros a serem inseridos logo após a criação da tabela.
+     *
+     * @return void
+     */
+    private function insert()
+    {
+        DB::table('usuarios')->insertOrIgnore([
+            [
+                'admin' => true,
+                'email' => 'contato@jmarcossouza.com',
+                'senha' => Usuario::hashSenha('123'),
+                'nome' => 'João Marcos',
+                'sobrenome' => 'Souza',
+                'token_verificar_email' => null,
+                'created_at' => date('Y-m-d H:i:s')
+            ]
+            //Você pode outros usuários aqui
+        ]);
     }
 }
