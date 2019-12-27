@@ -109,4 +109,9 @@ $app->router->group([
     require __DIR__.'/../routes/web.php';
 });
 
+/**
+ * Troca de linguagem.
+ */
+app('translator')->setLocale('pt-BR');
+
 return $app;
