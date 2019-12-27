@@ -6,7 +6,8 @@
     "type": "project",
     "require": {
         "php": "^7.2",
-        "laravel/lumen-framework": "^6.0"
+        "laravel/lumen-framework": "^6.0",
+        "tymon/jwt-auth": "dev-develop"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
@@ -31,7 +32,13 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
-        "serve": "php -S localhost:7777 -t public/"
+        "serve": "php -S localhost:7777 -t public/",
+        "publish": [
+            "php artisan jwt:secret"
+        ],
+        "publish-first-time": [
+            "php artisan jwt:secret"
+        ]
     },
     "config": {
         "preferred-install": "dist",

@@ -20,5 +20,6 @@ $router->group(['prefix' => 'teste'], function () use ($router) {
 });
 
 $router->group([], function () use ($router) {
-    $router->post('usuarios/novo', 'AuthController@store');
+    $router->post('usuario/novo', 'AuthController@store');
+    $router->post('usuario/login', 'AuthController@login');
 });
