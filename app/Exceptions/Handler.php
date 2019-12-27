@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -22,6 +23,7 @@ class Handler extends ExceptionHandler
         HttpException::class,
         ModelNotFoundException::class,
         ValidationException::class,
+        NotFoundHttpException::class,
         CustomException::class
     ];
 
@@ -60,9 +62,45 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof CustomException || $exception instanceof InternalException) {
             return $exception->response();
+        } else if ($exception instanceof ValidationException) {
+            return Handler::HandleLumenValidationException($exception);
+        } else if ($exception instanceof ModelNotFoundException) {
+            $e = new CustomException('nao_encontrado', 'Não foi encontrado um registro baseado nos parâmetros enviados.', 404);
+            return $e->response();
+        } else if ($exception instanceof NotFoundHttpException) {
+            $e = new CustomException('rota_nao_encontrada', 'URL/Rota não encontrada.', 404);
+            return $e->response();
         }
 
 
         return parent::render($request, $exception);
+    }
+
+    /**
+     * Método que trata as Exceptions do validate() do Laravel/Lumen.
+     */
+    public static function HandleLumenValidationException(ValidationException $e) {
+        $mensagem = '';
+        foreach ($e->getResponse()->original as $key => $value) {
+            foreach ($value as $keyChild => $valueChild) {
+                if ($mensagem === '') {
+                    $mensagem.= "$valueChild";
+                } else {
+                    $mensagem.= " $valueChild";
+                }
+                
+            }
+        }
+
+        $invalid_e = new InvalidRequestException($mensagem);
+
+        return $invalid_e->response();
+        // return response()->json(
+        //     [
+        //         "chave_erro" => "request_invalido",
+        //         "mensagem"   => $mensagem,
+        //         "detalhes"   => $e->getResponse()->original
+        //     ], 422
+        // );
     }
 }
