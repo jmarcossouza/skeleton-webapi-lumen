@@ -34,11 +34,13 @@
         ],
         "serve": "php -S localhost:7777 -t public/",
         "publish": [
-            "php artisan jwt:secret"
+            "php artisan jwt:secret -f",
+            "php artisan migrate"
         ],
         "publish-first-time": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
-            "php artisan jwt:secret"
+            "php artisan jwt:secret -f",
+            "php artisan migrate:fresh"
         ]
     },
     "config": {
