@@ -16,6 +16,8 @@ class CreateUsuariosTable extends Migration
     public function up()
     {
         Schema::create('usuarios', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigIncrements('id');
             $table->boolean('ativo')->default(true);
             $table->boolean('admin')->default(false)->comment('Se o usuário faz parte da equipe de administração do sistema. Isso pode ser usado para mostrar dados e permitir ações somente à administradores.');

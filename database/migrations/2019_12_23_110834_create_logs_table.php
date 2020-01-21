@@ -15,6 +15,8 @@ class CreateLogsTable extends Migration
     public function up()
     {
         Schema::create('logs', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigInteger('usuario_id')->comment('ID do usuário, referência à tabela de usuarios');
             $table->dateTime('data', 3)->default(DB::raw('CURRENT_TIMESTAMP(3)')); //Se quiser mudar a precisão dos segundos, mudo o segundo parâmetro do dateTime() e também o raw('current_timestamp(..))
             $table->string('ip', 45)->comment('IP do usuário, pode ser tanto IPV6 quanto IPV4');

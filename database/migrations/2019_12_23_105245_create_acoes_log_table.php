@@ -15,6 +15,8 @@ class CreateAcoesLogTable extends Migration
     public function up()
     {
         Schema::create('acoes_log', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->smallIncrements('id');
             $table->string('acao', 100);
         });

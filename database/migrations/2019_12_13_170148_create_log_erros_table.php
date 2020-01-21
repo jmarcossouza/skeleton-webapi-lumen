@@ -14,6 +14,8 @@ class CreateLogErrosTable extends Migration
     public function up()
     {
         Schema::create('log_erros', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->bigIncrements('id');
             $table->boolean('resolvido')->default(false)->comment('Define se o erro já foi resolvido ou não.');
             $table->string('erro', 8000)->comment('Mensagem de erro/Método __toString() do erro.');
