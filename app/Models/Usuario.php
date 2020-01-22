@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Mail\ConfirmarEmailMail;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -53,6 +55,7 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
         });
         self::created(function ($model) {
             Log::newLog(1, $model->id);
+            Mail::to($model->email)->send(new ConfirmarEmailMail(Usuario::findOrFail($model->id)));
         });
         self::updating(function ($model) {
             $model->senha = self::hashSenha($model->senha);

@@ -33,6 +33,7 @@ $app->withEloquent();
 */
 
 $app->configure('defaults'); //Minhas configurações gerais, variáveis de ambiente, etc.
+$app->configure('mail');//Mail
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,13 @@ $app->register(App\Providers\AuthServiceProvider::class);
 
 // Tymon/Jwt
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
+
+//Mail
+$app->register(Illuminate\Mail\MailServiceProvider::class);
+
+$app->alias('mailer', Illuminate\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\Mailer::class);
+$app->alias('mailer', Illuminate\Contracts\Mail\MailQueue::class);
 
 /*
 |--------------------------------------------------------------------------
