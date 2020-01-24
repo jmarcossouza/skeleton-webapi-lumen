@@ -19,7 +19,7 @@
     <p>Olá, {{$usuario->nome}}</p>
     <p>Clique no link abaixo para confirmar sua conta {{$app_name}}.</p>
 
-    <p><a href="{{$client_url}}/usuario/confirmar-email/{{$usuario->token_verificar_email}}" target="_blank">Confirmar conta</a></p>
+    <p><a href="{{$client_url}}/usuario/confirmar-email/{{$usuario->token_confirmar_email}}" target="_blank">Confirmar conta</a></p>
 
     <div style="margin-top: 50px;">
         <span class="apple-link">Este é um e-mail automático, não o responda.</span>

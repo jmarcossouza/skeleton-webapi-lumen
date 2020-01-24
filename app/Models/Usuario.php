@@ -20,14 +20,14 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
      *
      * @var array
      */
-    protected $fillable = ['email', 'senha', 'nome', 'sobrenome', 'token_recuperar_senha', 'exp_recuperar_senha'];
+    protected $fillable = ['email', 'senha', 'nome', 'sobrenome', 'token_recuperar_senha', 'exp_recuperar_senha', 'token_confirmar_email'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['senha'];
+    protected $hidden = ['senha', 'token_confirmar_email', 'token_recuperar_senha'];
 
     protected $casts = [
         'ativo' => 'boolean',
@@ -46,15 +46,15 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
         self::creating(function ($model) {
             $model->senha = self::hashSenha($model->senha);
 
-            if (config('defaults.usu_ver_email') == true) {
-                $model->token_verificar_email = self::tokenUnico();
+            if (config('defaults.usuario_confirmar_email') == true) {
+                $model->token_confirmar_email = self::tokenUnico();
             } else {
-                $model->token_verificar_email = null;
+                $model->token_confirmar_email = null;
             }
         });
         self::created(function ($model) {
             Log::newLog(1, $model->id);
-            if ($model->token_verificar_email != null) { //Aqui, ao invés de verificar se config('defaults.usu_ver_email') == true. É melhor verificar se o campo do token do cara está nulo. Porque pode acontecer de eu mudar a configuração enquanto alguém está criando um usuário, aí o código cairá aqui e não enviará o e-mail de confirmação.
+            if ($model->token_confirmar_email != null) { //Aqui, ao invés de verificar se config('defaults.usuario_confirmar_email') == true. É melhor verificar se o campo do token do cara está nulo. Porque pode acontecer de eu mudar a configuração enquanto alguém está criando um usuário, aí o código cairá aqui e não enviará o e-mail de confirmação.
                 dispatch(new ConfirmarEmailJob(Usuario::findOrFail($model->id))); //Enviar o e-mail de confirmação por queue (em segundo plano).
                 //Mail::to($model->email)->send(new ConfirmarEmailMail(Usuario::findOrFail($model->id))); //Enviar o e-mail de confirmação imediatamente.
             }

@@ -19,7 +19,8 @@ $router->group(['prefix' => 'teste'], function () use ($router) {
     $router->get('', 'TesteController@get');
 });
 
-$router->group([], function () use ($router) {
-    $router->post('usuario/novo', 'AuthController@store');
-    $router->post('usuario/login', 'AuthController@login');
+$router->group(['prefix' => 'usuario'], function () use ($router) {
+    $router->post('novo', 'AuthController@store');
+    $router->post('login', 'AuthController@login');
+    $router->post('reenviar-confirmacao-email', 'AuthController@reenviarConfirmarEmail');
 });

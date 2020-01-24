@@ -11,7 +11,7 @@ if (env('APP_ENV') === 'local') {
             'jwt' => null //Tempo em minutos ou null para não expirar
         ],
         'log' => true, //Se deve ser registrado na tabela log as ações realizadas na aplicação.
-        'usu_ver_email' => false, //Se o usuário deve ou não verificar o email ao criar a conta.
+        'usuario_confirmar_email' => true, //Se o usuário deve ou não verificar o email ao criar a conta.
         'client_url' => 'http://localhost:4200/#' //Url do Front-End
     ];
 } else {
@@ -22,7 +22,7 @@ if (env('APP_ENV') === 'local') {
             'jwt' => 20160
         ],
         'log' => true,
-        'usu_ver_email' => true,
+        'usuario_confirmar_email' => true,
         'client_url' => 'https://seusite.com'
     ];
 }
