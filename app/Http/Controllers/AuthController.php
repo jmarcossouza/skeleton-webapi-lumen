@@ -25,7 +25,8 @@ class AuthController extends Controller
 
     public function login(Request $request, Usuario $usuario)
     {
-        if ($usuario->where('email', $request->input('email'))->doesntExist()) {
+        $usuario = $usuario->where('email', $request->input('email'))->first();
+        if ($usuario == null) {
             throw new InvalidRequestException('Não há um usuário com uma conta associada ao e-mail informado.');
         }
 
@@ -37,6 +38,10 @@ class AuthController extends Controller
         if (!$token = $this->auth->attempt($credenciais)) {
             throw new InvalidRequestException("Senha incorreta.");
         }
+
+        if ($usuario->token_verificar_email != null) {
+            throw new InvalidRequestException("Sua conta ainda não foi confirmada, verifique seu e-mail. Caso necessário, enviaremos outro e-mail de confirmação.");
+        }
         return $this->respondWithToken($token);
     }
 
@@ -47,5 +52,4 @@ class AuthController extends Controller
             'token' => $token
         ]);
     }
-
 }
