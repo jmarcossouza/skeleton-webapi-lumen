@@ -15,7 +15,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->auth = app('auth');
-        $this->middleware('auth:api', ['except' => ['login', 'store', 'verificarEmail', 'recuperar_senha', 'redefinir_senha', 'reenviarConfirmarEmail']]);
+        $this->middleware('auth:api', ['except' => ['login', 'store', 'reenviarConfirmarEmail', 'confirmarEmail']]);
     }
 
     public function store(Request $request, Usuario $usuario)
@@ -71,6 +71,20 @@ class AuthController extends Controller
         }
 
         return response()->json(['mensagem' => 'Enviamos novamente um e-mail para confirmar sua conta.'], 200);
+    }
+
+    public function confirmarEmail(Request $request)
+    {
+        $usuario = Usuario::where('token_confirmar_email', $request->input('token'))->first();
+
+        if ($usuario == null) {
+            throw new ModelNotFoundException();
+        }
+
+        $usuario->token_confirmar_email = null;
+        $usuario->save();
+
+        return response()->json(['mensagem' => 'Sua conta foi confirmada.']);
     }
 
 

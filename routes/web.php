@@ -23,4 +23,5 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('novo', 'AuthController@store');
     $router->post('login', 'AuthController@login');
     $router->post('reenviar-confirmacao-email', 'AuthController@reenviarConfirmarEmail');
+    $router->post('confirmar-email', 'AuthController@confirmarEmail');
 });
