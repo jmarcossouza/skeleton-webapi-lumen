@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => env('Skeleton Lumen', 'contato@jmarcossouza.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'contato@jmarcossouza.com'),
+        'name' => env('MAIL_FROM_NAME', 'Skeleton Lumen'),
     ],
 
     /*

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Jobs\ConfirmarEmailJob;
+use DateTime;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -20,18 +21,25 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
      *
      * @var array
      */
-    protected $fillable = ['email', 'senha', 'nome', 'sobrenome', 'token_recuperar_senha', 'exp_recuperar_senha', 'token_confirmar_email'];
+    protected $fillable = ['email', 'senha', 'nome', 'sobrenome', 'token_redefinir_senha', 'exp_redefinir_senha', 'token_confirmar_email'];
 
     /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
      */
-    protected $hidden = ['senha', 'token_confirmar_email', 'token_recuperar_senha'];
+    protected $hidden = ['senha', 'token_confirmar_email', 'token_redefinir_senha'];
 
     protected $casts = [
         'ativo' => 'boolean',
     ];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['exp_redefinir_senha'];
 
     public $regras_validacao = [
         'email'         => 'bail|required|unique:usuarios|max:60',
@@ -91,10 +99,13 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
      *
      * @return string Retornará o token necessário para recuperar a senha.
      */
-    public function recuperarSenha(): string
+    public function esqueciMinhaSenha(): string
     {
         $token = Usuario::tokenUnico();
-        $this->token_recuperar_senha = $token;
+        $this->timestamps = false; //Pra não atualizar o updated_at
+        $this->token_redefinir_senha = $token;
+        $string_minutos = "+" . config('defaults.exp.redefinir_senha') . " minutes";
+        $this->exp_redefinir_senha = (new DateTime($string_minutos));
         $this->save();
 
         return $token;

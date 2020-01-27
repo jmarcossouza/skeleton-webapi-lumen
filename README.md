@@ -8,3 +8,4 @@ Lumen (6.2.0)
 # Queue names
 
 `confirmar_email_mail` Queue para enviar e-mails de confirmação de novas contas.
+`redefinir_senha_mail` Queue para enviar os e-mails de redefinição de senha.

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\ConfirmarEmailJob;
+use App\Jobs\RedefinirSenhaJob;
 use App\Models\Usuario;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->auth = app('auth');
-        $this->middleware('auth:api', ['except' => ['login', 'store', 'reenviarConfirmarEmail', 'confirmarEmail']]);
+        $this->middleware('auth:api', ['only' => []]);
     }
 
     public function store(Request $request, Usuario $usuario)
@@ -85,6 +86,21 @@ class AuthController extends Controller
         $usuario->save();
 
         return response()->json(['mensagem' => 'Sua conta foi confirmada.']);
+    }
+
+    public function esqueciMinhaSenha(Request $request)
+    {
+        $usuario = Usuario::where('email', $request->input('email'))->first();
+
+        if ($usuario == null) {
+            throw new ModelNotFoundException();
+        }
+
+        $usuario->esqueciMinhaSenha();
+        //Mail::to($usuario->email)->send(new RedefinirSenhaMail($usuario));
+        dispatch(new RedefinirSenhaJob($usuario));
+
+        return response()->json(['mensagem' => 'Enviamos um e-mail com instruções para redefinir sua senha.'], 200);
     }
 
 

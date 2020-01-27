@@ -25,8 +25,8 @@ class CreateUsuariosTable extends Migration
             $table->char('senha', 60);
             $table->string('nome', 20);
             $table->string('sobrenome', 40);
-            $table->char('token_recuperar_senha', 64)->nullable()->default(null)->unique()->comment('Token para o usuário redefinir a senha da conta.');;
-            $table->dateTime('exp_recuperar_senha')->nullable()->default(null);
+            $table->char('token_redefinir_senha', 64)->nullable()->default(null)->unique()->comment('Token para o usuário redefinir a senha da conta.');;
+            $table->dateTime('exp_redefinir_senha')->nullable()->default(null);
             $table->char('token_confirmar_email', 64)->nullable()->unique()->comment('Token para o usuário confirmar o e-mail a conta. Se estiver nulo, é porque a conta está verificada.');
             $table->timestamps();
         });

@@ -4,7 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Exemplo extends Model {
+class Exemplo extends Model
+{
 
     /**
      * Nome da tabela
@@ -84,6 +85,13 @@ class Exemplo extends Model {
     public $timestamps = false;
 
     /**
+     * The attributes that should be mutated to dates.
+     *  Indica quais campos são datas, que aí o Laravel já adianta uns bagui.
+     * @var array
+     */
+    protected $dates = ['exp_redefinir_senha'];
+
+    /**
      * Só são chamados quando alterando as properties do objeto e depois usando o save(). Ex: no $this->update() do Eloquent, isso aqui não é chamado.
      * Então, para isso funcionar, é o correto usar sempre os modelos para fazer as operações.
      * Funciona no $this->create()
@@ -91,22 +99,22 @@ class Exemplo extends Model {
     public static function boot()
     {
         parent::boot();
-        self::creating(function($model){
+        self::creating(function ($model) {
             // ... code here
         });
-        self::created(function($model){
+        self::created(function ($model) {
             // ... code here
         });
-        self::updating(function($model){
+        self::updating(function ($model) {
             // ... code here
         });
-        self::updated(function($model){
+        self::updated(function ($model) {
             // ... code here
         });
-        self::deleting(function($model){
+        self::deleting(function ($model) {
             // ... code here
         });
-        self::deleted(function($model){
+        self::deleted(function ($model) {
             // ... code here
         });
     }

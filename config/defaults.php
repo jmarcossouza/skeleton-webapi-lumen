@@ -1,13 +1,13 @@
 <?php
 
 //Para usar:
-//usar config('defaults.exp.recuperar_senha');
+//usar config('defaults.exp.redefinir_senha');
 
 if (env('APP_ENV') === 'local') {
     //Desenv
     return [
         'exp' => [ //Todas as funções de exp serão em MNUTOS
-            'recuperar_senha' => 5,
+            'redefinir_senha' => 120,
             'jwt' => null //Tempo em minutos ou null para não expirar
         ],
         'log' => true, //Se deve ser registrado na tabela log as ações realizadas na aplicação.
@@ -18,7 +18,7 @@ if (env('APP_ENV') === 'local') {
     //Produção
     return [
         'exp' => [
-            'recuperar_senha' => 60,
+            'redefinir_senha' => 60,
             'jwt' => 20160
         ],
         'log' => true,
