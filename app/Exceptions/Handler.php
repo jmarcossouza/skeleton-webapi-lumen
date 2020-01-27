@@ -88,11 +88,11 @@ class Handler extends ExceptionHandler
                 } else {
                     $mensagem.= " $valueChild";
                 }
-                
+
             }
         }
 
-        $invalid_e = new InvalidRequestException($mensagem);
+        $invalid_e = new InvalidBodyRequest($mensagem, $e->errors());
 
         return $invalid_e->response();
         // return response()->json(

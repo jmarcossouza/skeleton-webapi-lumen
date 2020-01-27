@@ -29,6 +29,7 @@ class AuthController extends Controller
 
     public function login(Request $request, Usuario $usuario)
     {
+        $this->validate($request, ['email' => 'required', 'senha' => 'required']);
         $usuario = $usuario->where('email', $request->input('email'))->first();
         if ($usuario == null) {
             throw new InvalidRequestException('Não há um usuário com uma conta associada ao e-mail informado.');
@@ -51,6 +52,7 @@ class AuthController extends Controller
 
     public function reenviarConfirmarEmail(Request $request)
     {
+        $this->validate($request, ['email' => 'required']);
         $usuario = Usuario::where('email', $request->input('email'))->first();
 
         if ($usuario == null) {
@@ -76,6 +78,7 @@ class AuthController extends Controller
 
     public function confirmarEmail(Request $request)
     {
+        $this->validate($request, ['token' => 'required']);
         $usuario = Usuario::where('token_confirmar_email', $request->input('token'))->first();
 
         if ($usuario == null) {
@@ -90,6 +93,7 @@ class AuthController extends Controller
 
     public function esqueciMinhaSenha(Request $request)
     {
+        $this->validate($request, ['email' => 'required']);
         $usuario = Usuario::where('email', $request->input('email'))->first();
 
         if ($usuario == null) {
