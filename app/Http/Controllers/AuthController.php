@@ -48,6 +48,12 @@ class AuthController extends Controller
         return $usuario->toJson();
     }
 
+    public function eu()
+    {
+        $usuario = $this->auth->user();
+        return $usuario->toJson();
+    }
+
     public function login(Request $request, Usuario $usuario)
     {
         $this->validate($request, ['email' => 'required', 'senha' => 'required']);

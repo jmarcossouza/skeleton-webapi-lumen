@@ -28,7 +28,7 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
      *
      * @var array
      */
-    protected $hidden = ['senha', 'token_confirmar_email', 'token_redefinir_senha'];
+    protected $hidden = ['senha', 'token_confirmar_email', 'token_redefinir_senha', 'exp_redefinir_senha'];
 
     protected $casts = [
         'ativo' => 'boolean',
