@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\ConfirmarEmailJob;
 use App\Jobs\RedefinirSenhaJob;
 use App\Models\Usuario;
+use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -107,6 +109,51 @@ class AuthController extends Controller
         return response()->json(['mensagem' => 'Enviamos um e-mail com instruções para redefinir sua senha.'], 200);
     }
 
+    public function redefinirSenha(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'token' => 'required',
+                'senha' => 'bail|required|min:6|max:64'
+            ]
+        );
+        $usuario = Usuario::where('token_redefinir_senha', $request->input('token'))->first();
+
+        if ($usuario == null) {
+            throw new InvalidRequestException('O token enviado é inválido.');
+        }
+
+        if (new DateTime($usuario->exp_redefinir_senha) < new DateTime()) {
+            DB::beginTransaction();
+            try {
+                $usuario->token_redefinir_senha = null;
+                $usuario->exp_redefinir_senha = null;
+                $usuario->save();
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                DB::rollback();
+            }
+
+            throw new InvalidRequestException('O token enviado expirou.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $usuario->senha = Usuario::hashSenha($request->input('senha'));
+            $usuario->token_redefinir_senha = null;
+            $usuario->exp_redefinir_senha = null;
+            $usuario->save();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
+            throw new InternalException($th, 'Erro inesperado ao alterar a senha, tente novamente mais tarde.');
+        }
+
+        return response()->json(['mensagem' => 'Sua senha foi alterada.'], 200);
+    }
 
     protected function respondWithToken($token)
     {

@@ -25,4 +25,5 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('reenviar-confirmacao-email', 'AuthController@reenviarConfirmarEmail');
     $router->post('confirmar-email', 'AuthController@confirmarEmail');
     $router->post('esqueci-minha-senha', 'AuthController@esqueciMinhaSenha');
+    $router->post('redefinir-senha', 'AuthController@redefinirSenha');
 });

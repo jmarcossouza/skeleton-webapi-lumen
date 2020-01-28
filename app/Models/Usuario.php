@@ -68,7 +68,7 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
             }
         });
         self::updating(function ($model) {
-            $model->senha = self::hashSenha($model->senha);
+
         });
     }
 
@@ -92,6 +92,11 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
     public function verificarSenha(string $senha): bool
     {
         return Hash::check($senha, $this->senha);
+    }
+
+    public static function verificarSenhaStatic(string $senha, string $hash): bool
+    {
+        return Hash::check($senha, $hash);
     }
 
     /**
