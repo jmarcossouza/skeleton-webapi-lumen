@@ -6,6 +6,7 @@ use App\Exceptions\InternalException;
 use App\Exceptions\InvalidRequestException;
 use App\Jobs\ConfirmarEmailJob;
 use App\Jobs\RedefinirSenhaJob;
+use App\Models\Log;
 use App\Models\Usuario;
 use DateTime;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -86,12 +87,15 @@ class AuthController extends Controller
         ];
 
         if (!$token = $this->auth->attempt($credenciais)) {
-            throw new InvalidRequestException("Senha incorreta.");
+            Log::newLogUsuario(3, $usuario);
+            throw new InvalidRequestException("A senha está incorreta.");
         }
 
         if ($usuario->token_confirmar_email != null) {
             throw new InvalidRequestException("Sua conta ainda não foi confirmada, verifique seu e-mail. Caso necessário, enviaremos outro e-mail de confirmação.");
         }
+
+        Log::newLogUsuario(2, $usuario);
         return $this->respondWithToken($token);
     }
 
@@ -149,6 +153,7 @@ class AuthController extends Controller
         //Mail::to($usuario->email)->send(new RedefinirSenhaMail($usuario));
         dispatch(new RedefinirSenhaJob($usuario));
 
+        Log::newLogUsuario(4, $usuario);
         return response()->json(['mensagem' => 'Enviamos um e-mail com instruções para redefinir sua senha.'], 200);
     }
 
@@ -195,6 +200,7 @@ class AuthController extends Controller
             throw new InternalException($th, 'Erro inesperado ao alterar a senha, tente novamente mais tarde.');
         }
 
+        Log::newLogUsuario(5, $usuario);
         return response()->json(['mensagem' => 'Sua senha foi alterada.'], 200);
     }
 

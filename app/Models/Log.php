@@ -37,7 +37,7 @@ class Log extends Model
         if (app('auth')->user()) {
             self::newLog($acao, app('auth')->user()->getAuthIdentifier());
         } else {
-            throw new InternalException(new \Exception("app('auth')->user() retornou nulo.", 500), 'Erro interno no servidor. Por favor, tente novamente.');
+            throw new InternalException(new \Exception("Erro no log: app('auth')->user() retornou nulo.", 500), 'Erro interno no servidor. Por favor, tente novamente.');
         }
     }
 
@@ -46,7 +46,7 @@ class Log extends Model
         if ($usuario_id = $usuario->getKey() != null) {
             self::newLog($acao, $usuario_id);
         } else {
-            throw new InternalException(new \Exception('Método $usuario->getKey() falhou', 500), 'Erro interno no servidor. Por favor, tente novamente.');
+            throw new InternalException(new \Exception('Erro no log: Método $usuario->getKey() falhou', 500), 'Erro interno no servidor. Por favor, tente novamente.');
         }
     }
 }
