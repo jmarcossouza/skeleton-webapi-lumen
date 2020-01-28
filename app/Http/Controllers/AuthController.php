@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->auth = app('auth');
-        $this->middleware('auth:api', ['only' => []]);
+        $this->middleware('auth:api', ['only' => ['update']]);
     }
 
     public function store(Request $request, Usuario $usuario)
@@ -27,6 +27,25 @@ class AuthController extends Controller
 
         $novo_usuario = $usuario->create($request->all());
         return response()->json($novo_usuario, 201);
+    }
+
+    public function update(Request $request)
+    {
+        $this->validate($request, [
+            'nome'          => 'nullable|min:4|max:20',
+            'sobrenome'     => 'nullable|min:4|max:40'
+        ]);
+
+        $usuario = $this->auth->user();
+
+        foreach ($request->only(['nome', 'sobrenome']) as $key => $value) { //Cuidado ao alterar isso aqui, o método only() deve conter somente as keys que podem ser alteradas nesse método.
+            if ($value != null && $value != '') {
+                $usuario->$key = $value;
+            }
+        }
+        $usuario->save();
+
+        return $usuario->toJson();
     }
 
     public function login(Request $request, Usuario $usuario)
