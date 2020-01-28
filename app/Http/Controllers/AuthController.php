@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->auth = app('auth');
-        $this->middleware('auth:api', ['only' => ['update']]);
+        $this->middleware('auth:api', ['only' => ['update', 'eu', 'alterarSenha']]);
     }
 
     public function store(Request $request, Usuario $usuario)
@@ -46,6 +46,24 @@ class AuthController extends Controller
         $usuario->save();
 
         return $usuario->toJson();
+    }
+
+    public function alterarSenha(Request $request)
+    {
+        $this->validate($request, [
+            'senha_antiga' => 'required|min:6|max:64',
+            'nova_senha' => 'required|min:6|max:64'
+        ]);
+
+        $usuario = $this->auth->user();
+        if ($usuario->verificarSenha($request->senha_antiga) == false) {
+            throw new InvalidRequestException('A senha antiga está incorreta.');
+        }
+
+        $usuario->senha = Usuario::hashSenha($request->nova_senha);
+        $usuario->save();
+
+        return response(['mensagem' => 'A senha foi alterada.']);
     }
 
     public function eu()

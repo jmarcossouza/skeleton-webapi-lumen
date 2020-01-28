@@ -22,6 +22,7 @@ $router->group(['prefix' => 'teste'], function () use ($router) {
 $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('novo', 'AuthController@store');
     $router->put('alterar', 'AuthController@update');
+    $router->put('alterar-senha', 'AuthController@alterarSenha');
     $router->get('eu', 'AuthController@eu');
     $router->post('login', 'AuthController@login');
     $router->post('reenviar-confirmacao-email', 'AuthController@reenviarConfirmarEmail');
