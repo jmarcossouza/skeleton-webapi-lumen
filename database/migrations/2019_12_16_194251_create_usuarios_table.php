@@ -55,7 +55,7 @@ class CreateUsuariosTable extends Migration
             [
                 'admin' => true,
                 'email' => 'contato@jmarcossouza.com',
-                'senha' => Usuario::hashSenha('123'),
+                'senha' => Usuario::hashSenha('123456'),
                 'nome' => 'João Marcos',
                 'sobrenome' => 'Souza',
                 'token_confirmar_email' => null,

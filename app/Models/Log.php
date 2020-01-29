@@ -18,7 +18,7 @@ class Log extends Model
 
     public static function newLog(int $acao, int $usuario_id): void
     {
-        if (config('defaults.log') == true) {
+        if (config('defaults.logs.registrar_log') == true) {
             try {
                 self::create([
                     'usuario_id' => $usuario_id,
