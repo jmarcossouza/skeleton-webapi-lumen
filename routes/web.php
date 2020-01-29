@@ -31,10 +31,11 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('redefinir-senha', 'AuthController@redefinirSenha');
 });
 
-$router->group([], function() use ($router) {
-    $router->post('fale-conosco', 'FaleConoscoController@create');
-    $router->get('fale-conosco', 'FaleConoscoController@getAll');
-    $router->get('fale-conosco/{id}', 'FaleConoscoController@get');
-    $router->put('fale-conosco/{id}/marcar-visualizado', 'FaleConoscoController@marcarVisualizado');
-    $router->put('fale-conosco/{id}/desmarcar-visualizado', 'FaleConoscoController@desmarcarVisualizado');
+$router->group(['prefix' => 'fale-conosco'], function() use ($router) {
+    $router->post('', 'FaleConoscoController@create');
+    $router->get('', 'FaleConoscoController@getAll');
+    $router->get('{id}', 'FaleConoscoController@get');
+    $router->put('{id}/marcar-visualizado', 'FaleConoscoController@marcarVisualizado');
+    $router->put('{id}/desmarcar-visualizado', 'FaleConoscoController@desmarcarVisualizado');
+    $router->get('assuntos', 'FaleConoscoController@getAssuntos');
 });

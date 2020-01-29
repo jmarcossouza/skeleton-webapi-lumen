@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FaleConosco;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FaleConoscoController extends Controller
 {
@@ -37,13 +38,15 @@ class FaleConoscoController extends Controller
         return FaleConosco::findOrFail($id);
     }
 
-    public function marcarVisualizado($id) {
+    public function marcarVisualizado($id)
+    {
         $fale_conosco = FaleConosco::findOrFail($id);
         $fale_conosco->marcarVisualizado();
         return $fale_conosco->toJson();
     }
 
-    public function desmarcarVisualizado($id) {
+    public function desmarcarVisualizado($id)
+    {
         $fale_conosco = FaleConosco::findOrFail($id);
         $fale_conosco->desmarcarVisualizado();
         return $fale_conosco->toJson();
@@ -57,5 +60,10 @@ class FaleConoscoController extends Controller
         $fale_conosco->save();
 
         return $fale_conosco->toJson();
+    }
+
+    public function getAssuntos()
+    {
+        return DB::table('assuntos_fale_conosco')->get();
     }
 }
