@@ -163,7 +163,7 @@ class AuthController extends Controller
             $request,
             [
                 'token' => 'required',
-                'senha' => 'bail|required|min:6|max:64'
+                'senha' => 'required|min:6|max:64'
             ]
         );
         $usuario = Usuario::where('token_redefinir_senha', $request->input('token'))->first();

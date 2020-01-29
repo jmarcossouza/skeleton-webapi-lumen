@@ -42,10 +42,10 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
     protected $dates = ['exp_redefinir_senha'];
 
     public $regras_validacao = [
-        'email'         => 'bail|required|unique:usuarios|max:60',
-        'senha'         => 'bail|required|min:6|max:64',
-        'nome'          => 'bail|required|min:4|max:20',
-        'sobrenome'     => 'bail|required|min:4|max:40'
+        'email'         => 'required|unique:usuarios|max:60',
+        'senha'         => 'required|min:6|max:64',
+        'nome'          => 'required|min:4|max:20',
+        'sobrenome'     => 'required|min:4|max:40'
     ];
 
     public static function boot()

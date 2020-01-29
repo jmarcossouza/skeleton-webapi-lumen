@@ -48,9 +48,9 @@ class Exemplo extends Model
      * @var array
      */
     public $regras_validacao = [
-        'email' => 'bail|required|unique:usuario|max:60',
-        'senha' => 'bail|required|min:6|max:60',
-        'nome' => 'bail|required|min:4|max:60',
+        'email' => 'required|unique:usuario|max:60',
+        'senha' => 'required|min:6|max:60',
+        'nome' => 'required|min:4|max:60',
         'ultimo_login' => 'nullable',
     ];
 
