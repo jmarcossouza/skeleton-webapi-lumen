@@ -20,7 +20,7 @@ $router->group(['prefix' => 'teste'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'usuario'], function () use ($router) {
-    $router->post('novo', 'AuthController@store');
+    $router->post('novo', 'AuthController@create');
     $router->put('alterar', 'AuthController@update');
     $router->put('alterar-senha', 'AuthController@alterarSenha');
     $router->get('eu', 'AuthController@eu');
@@ -29,4 +29,12 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
     $router->post('confirmar-email', 'AuthController@confirmarEmail');
     $router->post('esqueci-minha-senha', 'AuthController@esqueciMinhaSenha');
     $router->post('redefinir-senha', 'AuthController@redefinirSenha');
+});
+
+$router->group([], function() use ($router) {
+    $router->post('fale-conosco', 'FaleConoscoController@create');
+    $router->get('fale-conosco', 'FaleConoscoController@getAll');
+    $router->get('fale-conosco/{id}', 'FaleConoscoController@get');
+    $router->put('fale-conosco/{id}/marcar-visualizado', 'FaleConoscoController@marcarVisualizado');
+    $router->put('fale-conosco/{id}/desmarcar-visualizado', 'FaleConoscoController@desmarcarVisualizado');
 });

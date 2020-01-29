@@ -22,7 +22,7 @@ class AuthController extends Controller
         $this->middleware('auth:api', ['only' => ['update', 'eu', 'alterarSenha']]);
     }
 
-    public function store(Request $request, Usuario $usuario)
+    public function create(Request $request, Usuario $usuario)
     {
         $this->validate($request, $usuario->regras_validacao);
 
