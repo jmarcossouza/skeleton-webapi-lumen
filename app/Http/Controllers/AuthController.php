@@ -27,7 +27,11 @@ class AuthController extends Controller
         $this->validate($request, $usuario->regras_validacao);
 
         $novo_usuario = $usuario->create($request->all());
-        return response()->json($novo_usuario, 201);
+
+        if ($novo_usuario->token_confirmar_email == null) {
+            return response()->json($novo_usuario, 201);
+        }
+        return response(['mensagem' => 'Sua conta foi criada! Enviamos um e-mail com instruções para a confirmação.'], 200);
     }
 
     public function update(Request $request)
