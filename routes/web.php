@@ -32,10 +32,10 @@ $router->group(['prefix' => 'usuario'], function () use ($router) {
 });
 
 $router->group(['prefix' => 'fale-conosco'], function() use ($router) {
+    $router->get('assuntos', 'FaleConoscoController@getAssuntos');
     $router->post('', 'FaleConoscoController@create');
     $router->get('', 'FaleConoscoController@getAll');
     $router->get('{id}', 'FaleConoscoController@get');
     $router->put('{id}/marcar-visualizado', 'FaleConoscoController@marcarVisualizado');
     $router->put('{id}/desmarcar-visualizado', 'FaleConoscoController@desmarcarVisualizado');
-    $router->get('assuntos', 'FaleConoscoController@getAssuntos');
 });
