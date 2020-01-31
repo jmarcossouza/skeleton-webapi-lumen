@@ -74,6 +74,10 @@ class AuthController extends Controller
     public function eu()
     {
         $usuario = $this->auth->user();
+        if ($usuario->ativo == false) {
+            throw new InvalidRequestException("Este usuário está inativo, entre em contato conosco.");
+        }
+
         return $usuario->toJson();
     }
 
@@ -97,6 +101,10 @@ class AuthController extends Controller
 
         if ($usuario->token_confirmar_email != null) {
             throw new InvalidRequestException("Sua conta ainda não foi confirmada, verifique seu e-mail. Caso necessário, enviaremos outro e-mail de confirmação.");
+        }
+
+        if ($usuario->ativo == false) {
+            throw new InvalidRequestException("Este usuário está inativo, entre em contato conosco.");
         }
 
         Log::newLogUsuario(2, $usuario);

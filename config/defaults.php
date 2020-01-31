@@ -10,7 +10,7 @@ if (env('APP_ENV') === 'local') {
             'redefinir_senha' => 120,
             'jwt' => null //Tempo em minutos ou null para não expirar
         ],
-        'usuario_confirmar_email' => true, //Se o usuário deve ou não verificar o email ao criar a conta.
+        'usuario_confirmar_email' => false, //Se o usuário deve ou não verificar o email ao criar a conta.
         'client_url' => 'http://localhost:4200/#', //Url do Front-End
         'logs' => [ //Defaults dos logs
             'registrar_log' => true, //Se deve ser registrado na tabela logs as ações realizadas na aplicação.

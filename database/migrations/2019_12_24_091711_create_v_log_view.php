@@ -12,6 +12,7 @@ class CreateVLogView extends Migration
      */
     public function up()
     {
+        DB::statement("drop view if exists v_logs"); //Sempre dropar a view e criar denovo.
         DB::statement("CREATE VIEW v_logs AS
             select logs.usuario_id, logs.data, logs.ip, acoes_log.acao
             from logs

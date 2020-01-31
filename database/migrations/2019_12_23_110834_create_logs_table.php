@@ -19,7 +19,7 @@ class CreateLogsTable extends Migration
 
             $table->bigInteger('usuario_id')->comment('ID do usuário, referência à tabela de usuarios');
             $table->dateTime('data', 3)->default(DB::raw('CURRENT_TIMESTAMP(3)')); //Se quiser mudar a precisão dos segundos, mudo o segundo parâmetro do dateTime() e também o raw('current_timestamp(..))
-            $table->string('ip', 45)->comment('IP do usuário, pode ser tanto IPV6 quanto IPV4');
+            $table->ipAddress('ip')->comment('IP do usuário, pode ser tanto IPV6 quanto IPV4');
             $table->smallInteger('acao_id')->unsigned()->comment('ID da ação realizada, olhar na tabela acoes_log');
 
             $table->primary(['usuario_id', 'data']);
