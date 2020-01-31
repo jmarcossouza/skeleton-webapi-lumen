@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\CssSelector\Exception\InternalErrorException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -47,6 +48,9 @@ class Handler extends ExceptionHandler
                 );
             } catch (\Exception $e) { } //Não fazer nada se acontecer erro.
         }
+        // else if ($exception instanceof InternalErrorException) {
+            //TERMINAR ISSO AQUI, UM REPORT PRA ERROS DE CÓDIGO.
+        // }
 
         parent::report($exception);
     }
@@ -65,13 +69,13 @@ class Handler extends ExceptionHandler
         } else if ($exception instanceof ValidationException) {
             return Handler::HandleLumenValidationException($exception);
         } else if ($exception instanceof ModelNotFoundException) {
-            $e = new CustomException('nao_encontrado', 'Não foi encontrado um registro baseado nos parâmetros enviados.', 404);
+            $e = new CustomException('nao_encontrado', 'Não foi encontrado um registro com base nos parâmetros enviados.', 404);
             return $e->response();
         } else if ($exception instanceof NotFoundHttpException) {
             $e = new CustomException('rota_nao_encontrada', 'URL/Rota não encontrada.', 404);
             return $e->response();
         }
-
+        //COLOCAR UM RENDER PROS ERROS DE CÓDIGO.
 
         return parent::render($request, $exception);
     }
@@ -81,15 +85,19 @@ class Handler extends ExceptionHandler
      */
     public static function HandleLumenValidationException(ValidationException $e) {
         $mensagem = '';
-        foreach ($e->getResponse()->original as $key => $value) {
-            foreach ($value as $keyChild => $valueChild) {
-                if ($mensagem === '') {
-                    $mensagem.= "$valueChild";
-                } else {
-                    $mensagem.= " $valueChild";
-                }
+        if (isset($e->getResponse()->original)) {
+            foreach ($e->getResponse()->original as $key => $value) {
+                foreach ($value as $keyChild => $valueChild) {
+                    if ($mensagem === '') {
+                        $mensagem.= "$valueChild";
+                    } else {
+                        $mensagem.= " $valueChild";
+                    }
 
+                }
             }
+        } else { //Cai aqui se o Validator for do Validator::make()->validate();
+            $mensagem = "Há erros de validação, verifique o corpo enviado.";
         }
 
         $invalid_e = new InvalidBodyRequest($mensagem, $e->errors());

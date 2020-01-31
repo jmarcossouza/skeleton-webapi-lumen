@@ -39,3 +39,11 @@ $router->group(['prefix' => 'fale-conosco'], function() use ($router) {
     $router->put('{id}/marcar-visualizado', 'FaleConoscoController@marcarVisualizado');
     $router->put('{id}/desmarcar-visualizado', 'FaleConoscoController@desmarcarVisualizado');
 });
+
+$router->group(['prefix' => 'ips-bloqueados'], function() use ($router) {
+    $router->get('todos', 'IpsBloqueadosController@getAll');
+    $router->get('', 'IpsBloqueadosController@get');
+    $router->post('', 'IpsBloqueadosController@create');
+    $router->put('', 'IpsBloqueadosController@update');
+    $router->delete('', 'IpsBloqueadosController@destroy');
+});
